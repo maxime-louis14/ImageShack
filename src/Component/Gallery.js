@@ -1,39 +1,42 @@
-import React from "react";
-import Imgix from "react-imgix";
+import React, { useEffect, useState } from "react";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import '../pages/style/Gallery.css'; // Assurez-vous d'importer le fichier CSS approprié
 
-const images = [
-  "forest1",
-  "forest2",
-  "forest3",
-  "mountain1",
-  "mountain2",
-  "mountain3",
-  "river1",
-  "river2",
-  "river3",
-];
+export default function Gallery() {
+  const [ImageData, setImageData] = useState([]);
+  const token = localStorage.getItem("token");
 
-const buildURL = (imagePath) =>
-  `https://assets.imgix.net/tutorials/${imagePath}.webp`;
+  useEffect(() => {
+    fetch("http://localhost:3000/images", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erreur lors de la requête");
+        }
+        return response.json();
+      })
+      .then(data => {
+        setImageData(data);
+      })
+      .catch(error => {
+        console.error("Erreur:", error);
+      });
+  }, []);
 
-const Gallery = () => {
+  console.log(ImageData);
+
   return (
-    <div className="gallery">
-      {images.map((image) => (
-        <Imgix
-          key={image}
-          src={buildURL(image)}
-          imgixParams={{
-            fit: "crop",
-            fm: "jpg",
-          }}
-          width="495"
-          height="600"
-          sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
-        />
+    <ImageList className="ImageList" sx={{ width: "auto", height: "auto" }} cols={3}>
+      {ImageData.map((images, index) => (
+        <ImageListItem key={index}>
+          <img className="imagehome" src={"http://localhost:3000/" + images.name} alt={"http://localhost:3000/" + images.url} />
+        </ImageListItem>
       ))}
-    </div>
+    </ImageList>
   );
-};
-
-export default Gallery;
+}
