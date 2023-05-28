@@ -32,11 +32,11 @@ export default function Gallery() {
 
   return (
     <ImageList className="ImageList" sx={{ width: "auto", height: "auto" }} cols={3}>
-      {ImageData.map((images, index) =>
+      {ImageData.map((images, index) => (
         <ImageListItem key={index}>
-          <img className="imagehome" src={images.name} alt={images} />
+          <img className="imagehome" src={"http://localhost:3000/" + images.name} alt={"http://localhost:3000/" + images.url} />
         </ImageListItem>
-      )}
+      ))}
     </ImageList>
   );
 }
