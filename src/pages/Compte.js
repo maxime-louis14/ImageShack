@@ -3,7 +3,7 @@ import { authContext } from "../Context/authContext";
 import { useNavigate } from "react-router-dom";
 import Photos from "./Photos";
 import "./style/compte.css"
-import Gallery from "../Component/Gallery";
+import ImageCompte from "../Component/ImageCompte"
 
 const DeleteAccount = ({ userId }) => {
   const { auth, setAuth } = useContext(authContext);
@@ -67,8 +67,7 @@ const DeleteAccount = ({ userId }) => {
         </li>
       )}
     </div>
-    
-    <Gallery />
+    <ImageCompte />
     </>
   );
 };

@@ -1,13 +1,33 @@
-export const uploadImage = formData => {
-  // Envoyer une requête POST à l'API backend avec les données du fichier
-  fetch("http://127.0.0.1:3000/images", {
-    method: "POST",
-    body: formData // Inclure l'objet FormData dans le corps de la requête
-  })
-    .then(response => {
-      console.log(response); // Afficher la réponse de l'API dans la console
+import React, { useEffect, useState } from "react";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import '../pages/style/Gallery.css'; // Assurez-vous d'importer le fichier CSS approprié
+
+export default function ImagesApi() {
+  const [ImageData, setImageData] = useState([]);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    fetch("http://localhost:3000/images", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
-    .catch(error => {
-      console.error(error); // Afficher une erreur si la requête échoue
-    });
-};
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erreur lors de la requête");
+        }
+        return response.json();
+      })
+      .then(data => {
+        setImageData(data);
+      })
+      .catch(error => {
+        console.error("Erreur:", error);
+      });
+
+  }, []);
+
+  return ImageData;
+}
