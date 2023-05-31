@@ -21,19 +21,20 @@ const DeleteAccount = ({ userId }) => {
         'Authorization': `Bearer ${token}`
       }
     })
-    .then(response => response.json())
     .then(data => {
+      const response = data.json()
+      
       setIsDeleting(false);
-      alert(data.message);
+      
       localStorage.removeItem("userId");
       localStorage.removeItem("token");
-
-      if (data.logaout) {
+      
+      if (response.logaout) {
         setAuth(null);
       }
 
       Navigate("/inscription");
-      window.location.reload();
+      
     })
     .catch(error => {
       console.error(error);
