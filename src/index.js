@@ -15,6 +15,7 @@ import Connection from "./pages/connection";
 import Photos from "./pages/Photos";
 import "./index.css";
 import { authContext, AuthProvider } from "./Context/authContext";
+import Image from "./pages/Image";
 function App() {
   const { auth } = useContext(authContext);
   const [token, setToken] = useState("");
@@ -31,6 +32,7 @@ function App() {
             path="/photos"
             element={auth ? <Photos /> : <Navigate to="/connection" />}
           />
+          <Route path="/image/:image" element={<Image />} />
         </Route>
       </Routes>
     </BrowserRouter>
