@@ -1,0 +1,12 @@
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+  }
+  
+  .image {
+    min-width: 70%;
+    height: auto;
+  }
