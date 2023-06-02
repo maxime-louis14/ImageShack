@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import '../pages/style/Gallery.css'; // Assurez-vous d'importer le fichier CSS approprié
 
-export default function ImagesApi() {
+export default function useImagesApi() {
   const [ImageData, setImageData] = useState([]);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://localhost:3000/images", {
+    fetch("http://127.0.0.1:3000/images", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -26,8 +23,8 @@ export default function ImagesApi() {
       .catch(error => {
         console.error("Erreur:", error);
       });
-
   }, []);
 
   return ImageData;
 }
+
