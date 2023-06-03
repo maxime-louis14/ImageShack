@@ -5,7 +5,7 @@ export default function UpdateImage(imageId, newIsPublic, token) {
     const UpdateImage = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:3000/images/${imageId}`,
+          `http://127.0.0.1:3001/images/${imageId}`,
           {
             method: "PUT",
             headers: {

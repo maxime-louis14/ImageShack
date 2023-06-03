@@ -7,7 +7,7 @@ export default function ImagesAllHome() {
   const images = ImagesApi();
 
   return (
-    <ImageList sx={{ width: "auto", height: "auto" }} cols={3}>
+    <ImageList sx={{ width: 500, height: 400 }} cols={3}>
       {images.map(image => (
         <ImageItem key={image.id} image={image} />
       ))}

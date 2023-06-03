@@ -44,7 +44,7 @@ const Photos = () => {
       body: formData
     };
     
-    fetch("http://localhost:3000/images", requestOptions)
+    fetch("http://localhost:3001/images", requestOptions)
       .then(response => {
         if (response.ok) {
           console.log("Image uploaded successfully");

@@ -33,7 +33,7 @@ const Connection = ({ token, setToken }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: data.email, password: data.password }),
     };
-    fetch("http://localhost:3000/login", requestOptions)
+    fetch("http://localhost:3001/login", requestOptions)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

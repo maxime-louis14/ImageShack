@@ -10,7 +10,7 @@ export default function ImagePublicPrive() {
   const [isPublic, setIsPublic] = useState(true); // État pour déterminer si les images sont publiques ou privées
 
   useEffect(() => {
-    fetch("http://localhost:3000/images", {
+    fetch("http://localhost:3001/images", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`

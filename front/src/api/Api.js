@@ -5,7 +5,7 @@ export default function useImagesApi() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3000/images", {
+    fetch("http://127.0.0.1:3001/images", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`

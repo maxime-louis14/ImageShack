@@ -7,17 +7,20 @@ import UpdateImage from "../api/UpdateImage";
 export default function ImagesCompte() {
   const [Images, setImages] = useState([]);
   const images = ImagesApi();
-  const [isPublicMap, setIsPublicMap] = useState({}); // État pour suivre l'état isPublic de chaque image
+  const [isPublicMap, setIsPublicMap] = useState({});
 
   useEffect(() => {
-    setImages(images);
-
-    // Créer une carte des états isPublic pour chaque image
-    const map = {};
-    images.forEach((image) => {
-      map[image.id] = image.isPublic;
-    });
-    setIsPublicMap(map);
+    // Vérifier si `images` a une valeur avant de l'utiliser pour définir `Images`
+    if (images) {
+      setImages(images);
+      
+      // Créer une carte des états isPublic pour chaque image
+      const map = {};
+      images.forEach((image) => {
+        map[image._id] = image.isPublic;
+      });
+      setIsPublicMap(map);
+    }
   }, [images]);
 
   const handleRoleChange = (imageId) => {
@@ -33,18 +36,17 @@ export default function ImagesCompte() {
   };
 
   return (
-    <>
-      <ImageList sx={{ width: "auto", height: "auto" }} cols={3}>
-        {images.map((image) => (
+    <div>
+      <ImageList cols={3}>
+        {Images.map((image) => (
           <ImageItem
-            key={image.id}
+            key={image._id}
             image={image}
             handleRoleChange={handleRoleChange}
-            isPublic={isPublicMap[image.id]} // Passer l'état isPublic correspondant à chaque image
+            isPublic={isPublicMap[image._id]}
           />
         ))}
       </ImageList>
-    </>
+    </div>
   );
 }
-
