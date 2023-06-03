@@ -4,6 +4,8 @@ import "../pages/style/photo.css";
 
 const Photos = () => {
   const [files, setFiles] = useState([]);
+  const [slug, setSlug] = useState(null);
+  const [isUploaded, setIsUploaded] = useState(false)
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: acceptedFiles => {
       setFiles(
@@ -44,10 +46,11 @@ const Photos = () => {
       body: formData
     };
     
-    fetch("http://localhost:3000/images", requestOptions)
+    fetch("http://127.0.0.1:3000/images", requestOptions)
       .then(response => {
         if (response.ok) {
           console.log("Image uploaded successfully");
+          setIsUploaded(true)
         } else {
           throw new Error("Failed to upload image");
         }
@@ -56,9 +59,36 @@ const Photos = () => {
         console.error(error);
       });
   };
+  useEffect(() => {
+    if(isUploaded){
+      const token = localStorage.getItem("token");
+      fetch("http://127.0.0.1:3000/images", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error("Erreur lors de la requête");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('la liste des fichier', data)
+      data.sort((a,b) => {
+        return new Date(b.date) - new Date(a.date);
+      })
+      setSlug(data[0].url)
+    })
+    .catch(error => {
+      console.error("Erreur:", error);
+    });
+    }
 
+  }, [isUploaded])
   return (
     <div className="Photo">
+      {!isUploaded && (<>
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps({ onChange: handleFile })} name="image" />
         <p>Drag 'n' drop some files here, or click to select files</p>
@@ -70,6 +100,15 @@ const Photos = () => {
       <button className="upload-btn" onClick={() => uploadFiles()}>
         Upload Images
       </button>
+      </>)}
+      {isUploaded && (<>
+      <p>Upload successfully</p>
+      {slug && (<p>your image is available at /image/{slug}</p>)}
+      
+        <button className="upload-btn" onClick={() => {setIsUploaded(false); setSlug(null)}}>
+        Upload another image
+      </button>
+      </>)}
     </div>
   );
 };
