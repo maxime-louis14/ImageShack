@@ -49,7 +49,7 @@ export default function ImageCompte() {
       private: !isPrivate
     };
 
-    fetch("http://localhost:3001/images/" + id, {
+    fetch("http://51.75.18.60:3001/images/" + id, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export default function ImageCompte() {
   };
 
 const deleteImage = (id) => {
-  fetch("http://localhost:3001/deleteImage/" + id, {
+  fetch("http://51.75.18.60:3001/deleteImage/" + id, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -134,8 +134,8 @@ const deleteImage = (id) => {
                       </p>
             <img
               className="imagehome"
-              src={"http://localhost:3001/" + image.name}
-              alt={"http://localhost:3001/" + image.url}
+              src={"http://51.75.18.60:3001/" + image.name}
+              alt={"http://51.75.18.60:3001/" + image.url}
             />
  
           </ImageListItem>

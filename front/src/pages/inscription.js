@@ -22,7 +22,7 @@ const Inscription = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: data.email, password: data.password }),
     };
-    fetch("http://localhost:3001/account", requestOptions)
+    fetch("http://51.75.18.60:3001/account", requestOptions)
       .then((response) => response.json())
       .catch((e) => console.log(e));
     reset();
