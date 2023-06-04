@@ -31,7 +31,7 @@ const ImageUser = model("imageUser", imageDto);
 
 // Connect to the MongoDB database
 mongoose
-  .connect("mongodb+srv://robin:robin@schoolmaterialcluster.xhun1xs.mongodb.net/")
+  .connect("mongodb+srv://maximelouis321:8w8yJQb5NsrULyNL@projet4.frvzb3j.mongodb.net/?retryWrites=true&w=majority")
   .then(() => console.log("Connected to MongoDB database"))
   .catch((error) =>
     console.log("Error connecting to MongoDB database: ", error)

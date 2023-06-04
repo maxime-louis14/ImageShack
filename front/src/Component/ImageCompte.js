@@ -93,7 +93,7 @@ const deleteImage = (id) => {
 
   return (
     <div>
-      <ImageList className="ImageList" sx={{ width: "50vw", height: "auto" }} cols={1}>
+      <ImageList className="ImageList" sx={{ width: "450px", height: "auto" }} cols={1}>
         {ImageData && ImageData.map((image, index) => {
           
           let monthactive; 
