@@ -3,7 +3,7 @@ import { authContext } from "../Context/authContext";
 import { useNavigate } from "react-router-dom";
 import Photos from "./Photos";
 import "./style/compte.css"
-import Gallery from "../Component/Gallery";
+import ImageCompte from "../Component/ImageCompte"
 
 const DeleteAccount = ({ userId }) => {
   const { auth, setAuth } = useContext(authContext);
@@ -15,7 +15,7 @@ const DeleteAccount = ({ userId }) => {
     const token = localStorage.getItem('token');
 
     // Effectuer la requête de suppression sans axios
-    fetch('http://127.0.0.1:3000/account', {
+    fetch('http://127.0.0.1:3001/account', {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -69,7 +69,7 @@ const DeleteAccount = ({ userId }) => {
       )}
     </div>
     
-    <Gallery />
+    <ImageCompte/>
     </>
   );
 };

@@ -1,9 +1,20 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
-import "./style/inscription.css"
+import { useNavigate } from "react-router-dom";
+import "./style/connection.css"
 
-const Inscription = () => {
+import { authContext } from "../Context/authContext";
+
+const Connection = ({ token, setToken }) => {
+  const Navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("hello");
+  }, []);
+
+  const { auth, setAuth } = useContext(authContext);
   const schema = Yup.object().shape({
     email: Yup.string().email("email non valide").required(),
     password: Yup.string().required(),
@@ -22,15 +33,22 @@ const Inscription = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: data.email, password: data.password }),
     };
-    fetch("http://localhost:3000/account", requestOptions)
+    fetch("http://localhost:3001/login", requestOptions)
       .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        localStorage.setItem("token", data.token);
+        setAuth(data.token);
+        Navigate("/");
+
+      })
       .catch((e) => console.log(e));
     reset();
   };
   return (
-    <div className="Inscription ">
+    <div className="Connection">
       <form onSubmit={handleSubmit(onSubmitHandler)}>
-        <h2>Lets sign you up.</h2>
+        <h2>Lets sign you in.</h2>
         <br />
 
         <input
@@ -49,10 +67,10 @@ const Inscription = () => {
         />
         <br />
 
-        <button type="submit">Sign up</button>
+        <button type="submit">Sign in</button>
       </form>
     </div>
   );
 };
 
-export default Inscription;
+export default Connection;

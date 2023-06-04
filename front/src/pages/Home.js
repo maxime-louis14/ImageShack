@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import Gallery from "../Component/Gallery.js";
+import HomeImage from "../Component/HomeImage";
 
 const Home = () => {
   return (
     <div>
-      <Gallery />
+    <h1> Bienvenu Bienvenu </h1>
+      <HomeImage />
     </div>
   );
 };
