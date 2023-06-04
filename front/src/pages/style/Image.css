@@ -2,12 +2,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 100vw;
+    height: auto;
+    width: auto;
     background-color: #000;
   }
   
   .image {
-    width: 90%;
-    height: 90%
+    width: auto;
+    height: auto
   }
