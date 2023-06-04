@@ -1,51 +1,68 @@
 import React, { useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageItem from "./ImageItem";
-import ImagesApi from "../api/Api";
-import UpdateImage from "../api/UpdateImage";
+import useImagesApi from "../api/ImagesApi";
+import Imageid from "../api/Imageid";
 
-export default function ImagesCompte() {
-  const [Images, setImages] = useState([]);
-  const images = ImagesApi();
-  const [isPublicMap, setIsPublicMap] = useState({});
+export default function ImagesCompte({ handleRoleChange }) {
+  // Déclaration des états
+  const [images, setImages] = useState([]); // État pour stocker les images
+  const imageData = useImagesApi(); // Appel au hook personnalisé useImagesApi
+  const [isPublicMap, setIsPublicMap] = useState({}); // État pour stocker les statuts de visibilité des images
 
-  useEffect(() => {
-    // Vérifier si `images` a une valeur avant de l'utiliser pour définir `Images`
-    if (images) {
-      setImages(images);
-      
-      // Créer une carte des états isPublic pour chaque image
-      const map = {};
-      images.forEach((image) => {
-        map[image._id] = image.isPublic;
-      });
-      setIsPublicMap(map);
-    }
-  }, [images]);
+  // Utilisation de useEffect pour effectuer une action après le rendu initial ou lorsqu'une dépendance change
+  useEffect(
+    () => {
+      if (imageData) {
+        setImages(imageData); // Mise à jour de l'état des images avec les données récupérées depuis useImagesApi
 
-  const handleRoleChange = (imageId) => {
+        const map = {};
+        imageData.forEach(image => {
+          map[image.id] = image.isPublic; // Création d'une carte (map) pour stocker les statuts de visibilité des images
+        });
+        setIsPublicMap(map); // Mise à jour de l'état de la carte des statuts de visibilité
+      }
+    },
+    [imageData]
+  );
+
+  // Fonction pour gérer le changement de statut de visibilité d'une image
+  const handleImageRoleChange = async id => {
     const token = localStorage.getItem("token");
-    const newIsPublic = !isPublicMap[imageId];
+    const newIsPublic = !isPublicMap[id]; // Inversion du statut de visibilité actuel
 
-    UpdateImage(imageId, newIsPublic, token);
-
-    setIsPublicMap((prevMap) => ({
-      ...prevMap,
-      [imageId]: newIsPublic,
-    }));
+    try {
+      await Imageid(id, newIsPublic, token); // Appel à la fonction Imageid pour mettre à jour le statut de visibilité dans l'API
+      setIsPublicMap(prevMap => ({
+        ...prevMap,
+        [id]: newIsPublic // Mise à jour du statut de visibilité dans l'état de la carte
+      }));
+    } catch (error) {
+      console.error("Error changing visibility:", error);
+    }
   };
 
   return (
     <div>
       <ImageList cols={3}>
-        {Images.map((image) => (
-          <ImageItem
-            key={image._id}
-            image={image}
-            handleRoleChange={handleRoleChange}
-            isPublic={isPublicMap[image._id]}
-          />
-        ))}
+        {images.map(image =>
+          <div key={image.id}>
+            <ImageItem
+              key={image.id}
+              image={image}
+              handleRoleChange={handleImageRoleChange}
+              isPublic={isPublicMap[image.id]} // Passage du statut de visibilité à l'élément ImageItem
+            />
+            <button
+              className="customButton"
+              onClick={() => {
+                handleRoleChange(); // Appel à la fonction handleRoleChange pour gérer le rôle de l'image
+              }}
+            >
+              Changer le statut
+            </button>
+          </div>
+        )}
       </ImageList>
     </div>
   );

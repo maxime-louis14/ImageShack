@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useImagesApi() {
-  const [ImageData, setImageData] = useState([]);
+  const [imageData, setImageData] = useState([]);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     fetch("http://127.0.0.1:3001/images", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
       }
     })
       .then(response => {
@@ -23,8 +24,7 @@ export default function useImagesApi() {
       .catch(error => {
         console.error("Erreur:", error);
       });
-  }, []);
+  }, [token]);
 
-  return ImageData;
+  return imageData;
 }
-

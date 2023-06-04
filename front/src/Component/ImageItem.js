@@ -1,29 +1,16 @@
 import React from "react";
 import "../pages/style/Gallery.css";
 
-export default function ImageItem({ image, handleRoleChange, isPublic }) {
-  const handleClick = () => {
-    handleRoleChange(image._id);
-  };
-
+export default function ImageItem({ image }) {
   return (
-    <>
     <div>
-      {isPublic && (
-        <div className="ImageList" style={{ width: "auto", height: "auto" }}>
-          <img
-            className="imagehome"
-            src={"http://localhost:3001/" + image.name}
-            alt={"http://localhost:3001/" + image.url}
-          />
-        </div>
-      )}
-      {isPublic && (
-        <button className="customButton" onClick={handleClick}>
-          Changer le statut
-        </button>
-      )}
+      <div className="ImageList" style={{ width: "auto", height: "auto" }}>
+        <img
+          className="imagehome"
+          src={"http://localhost:3001/" + image.name}
+          alt={image.url}
+        />
       </div>
-    </>
+    </div>
   );
 }

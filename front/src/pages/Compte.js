@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { authContext } from "../Context/authContext";
 import { useNavigate } from "react-router-dom";
 import Photos from "./Photos";
+import Image from "./Image";
 import "./style/compte.css"
 import ImageCompte from "../Component/ImageCompte"
 
@@ -43,6 +44,7 @@ const DeleteAccount = ({ userId }) => {
 
   return (<>
     <Photos/>
+    <Image/>
     
     <div className="DeleteAccount">
       {isDeleting ? (
