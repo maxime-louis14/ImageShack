@@ -1,69 +1,96 @@
 import React, { useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
-import ImageItem from "./ImageItem";
-import useImagesApi from "../api/ImagesApi";
-import Imageid from "../api/Imageid";
+import ImageListItem from "@mui/material/ImageListItem";
+import Button from "@mui/material/Button";
+import "../pages/style/Gallery.css"; // Assurez-vous d'importer le fichier CSS approprié
+import { useNavigate } from "react-router-dom";
 
-export default function ImagesCompte({ handleRoleChange }) {
-  // Déclaration des états
-  const [images, setImages] = useState([]); // État pour stocker les images
-  const imageData = useImagesApi(); // Appel au hook personnalisé useImagesApi
-  const [isPublicMap, setIsPublicMap] = useState({}); // État pour stocker les statuts de visibilité des images
+export default function Gallery() {
+  const [ImageData, setImageData] = useState([]);
+  const token = localStorage.getItem("token");
+  const Navigate = useNavigate();
 
-  // Utilisation de useEffect pour effectuer une action après le rendu initial ou lorsqu'une dépendance change
-  useEffect(
-    () => {
-      if (imageData) {
-        setImages(imageData); // Mise à jour de l'état des images avec les données récupérées depuis useImagesApi
-
-        const map = {};
-        imageData.forEach(image => {
-          map[image.id] = image.isPublic; // Création d'une carte (map) pour stocker les statuts de visibilité des images
-        });
-        setIsPublicMap(map); // Mise à jour de l'état de la carte des statuts de visibilité
+  useEffect(() => {
+    fetch("http://localhost:3001/imagesUser", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
       }
-    },
-    [imageData]
-  );
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erreur lors de la requête");
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("la liste des fichiers", data);
+        setImageData(data);
+      })
+      .catch(error => {
+        console.error("Erreur:", error);
+      });
+  }, []);
 
-  // Fonction pour gérer le changement de statut de visibilité d'une image
-  const handleImageRoleChange = async id => {
-    const token = localStorage.getItem("token");
-    const newIsPublic = !isPublicMap[id]; // Inversion du statut de visibilité actuel
-
-    try {
-      await Imageid(id, newIsPublic, token); // Appel à la fonction Imageid pour mettre à jour le statut de visibilité dans l'API
-      setIsPublicMap(prevMap => ({
-        ...prevMap,
-        [id]: newIsPublic // Mise à jour du statut de visibilité dans l'état de la carte
-      }));
-    } catch (error) {
-      console.error("Error changing visibility:", error);
-    }
+  const toggleImagePrivacy = (id) => {
+    // Envoyez une requête pour changer l'état de l'image en privé ou public
+    // Utilisez la méthode appropriée (PUT ou PATCH) pour mettre à jour l'état de l'image
+    // Mettez à jour l'état de l'image dans le tableau ImageData en conséquence
+    // Par exemple, vous pouvez utiliser une requête comme celle-ci :
+    fetch("http://localhost:3001/images/" + id, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ private: true }) // Modifiez la valeur de `private` selon vos besoins
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erreur lors de la requête");
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Mettez à jour l'état de l'image dans le tableau ImageData
+        const updatedImageData = ImageData.map(image =>
+          image.id === id ? { ...image, private: true } : image
+        );
+        setImageData(updatedImageData);
+      })
+      .catch(error => {
+        console.error("Erreur:", error);
+      });
   };
+
+  console.log(ImageData);
 
   return (
     <div>
-      <ImageList cols={3}>
-        {images.map(image =>
-          <div key={image.id}>
-            <ImageItem
-              key={image.id}
-              image={image}
-              handleRoleChange={handleImageRoleChange}
-              isPublic={isPublicMap[image.id]} // Passage du statut de visibilité à l'élément ImageItem
+      <ImageList className="ImageList" sx={{ width: "auto", height: "auto" }} cols={3}>
+        {ImageData.map((image, index) => (
+          <ImageListItem key={index} onClick={() => Navigate(`/image/${image.url}`, { state: image })}>
+            {/* Affiche un indicateur "Privé" si l'image est privée */}
+            {image.private ? (
+              <span className="private-indicator">Privé</span>
+            ) : null}
+            <img
+              className="imagehome"
+              src={"http://localhost:3001/" + image.name}
+              alt={"http://localhost:3001/" + image.url}
             />
-            <button
-              className="customButton"
-              onClick={() => {
-                handleRoleChange(); // Appel à la fonction handleRoleChange pour gérer le rôle de l'image
-              }}
+            {/* Affiche un bouton pour changer la confidentialité de l'image */}
+            <Button
+              variant="contained"
+              onClick={() => toggleImagePrivacy(image.id)}
             >
-              Changer le statut
-            </button>
-          </div>
-        )}
+              Changer la confidentialité
+            </Button>
+            
+          </ImageListItem>
+        ))}
       </ImageList>
     </div>
   );
+  
 }

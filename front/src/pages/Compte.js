@@ -45,7 +45,6 @@ const DeleteAccount = ({ userId }) => {
   return (<>
     <Photos/>
     <Image/>
-    
     <div className="DeleteAccount">
       {isDeleting ? (
         <p>Deleting account...</p>
@@ -69,7 +68,7 @@ const DeleteAccount = ({ userId }) => {
         </li>
       )}
     </div>
-    <ImageCompte />
+    <ImageCompte/>
     </>
   );
 };

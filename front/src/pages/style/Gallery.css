@@ -1,23 +1,30 @@
 /* Gallery.css */
 
-.imagehome {
+/* .imagehome {
     height: 150px;
     width: 150px;
     object-fit: cover;
-  }
+  } */
 
-  .customButton {
+  /* .customButton {
     padding: 5px 5px;
     background-color: #4caf50;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
+  } */
   
   .customButton:hover {
     background-color: #45a049;
   }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
   
   
   /* Si vous souhaitez ajouter de l'espace entre les images */
