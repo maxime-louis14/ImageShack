@@ -11,7 +11,7 @@ export default function ImageCompte() {
   const Navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://51.75.18.60:3001/imagesUser", {
+    fetch("http://127.0.0.1:3001/imagesUser", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -49,7 +49,7 @@ export default function ImageCompte() {
       private: !isPrivate
     };
 
-    fetch("http://51.75.18.60:3001/images/" + id, {
+    fetch("http://127.0.0.1:3001/images/" + id, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export default function ImageCompte() {
   };
 
 const deleteImage = (id) => {
-  fetch("http://51.75.18.60:3001/deleteImage/" + id, {
+  fetch("http://127.0.0.1:3001/deleteImage/" + id, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -120,9 +120,10 @@ const deleteImage = (id) => {
               })}</h2>
             )}
             {/* Affiche un indicateur "Privé" si l'image est privée */}
-            {image.isPublic ? (
-              <span className="private-indicator">Public</span>
-            ) : <span className="private-indicator">Privée</span>}
+            {image.private ? (
+              <span className="private-indicator">Privée</span>
+            ) : 
+            <span className="private-indicator">Public</span>}
             <p>
                         
                         {new Date(image.date).toLocaleString("default", {
@@ -134,8 +135,8 @@ const deleteImage = (id) => {
                       </p>
             <img
               className="imagehome"
-              src={"http://51.75.18.60:3001/" + image.name}
-              alt={"http://51.75.18.60:3001/" + image.url}
+              src={"http://127.0.0.1:3001/" + image.name}
+              alt={"http://127.0.0.1:3001/" + image.url}
             />
  
           </ImageListItem>
