@@ -25,6 +25,9 @@ export default function ImageCompte() {
       })
       .then(data => {
         console.log("la liste des fichiers", data);
+        data.sort((a,b) => {
+          return new Date(b.date) - new Date(a.date);
+        })
         setImageData(data);
       })
       .catch(error => {
@@ -63,19 +66,49 @@ export default function ImageCompte() {
       });
   };
 
-  console.log(ImageData);
+  
 
   return (
     <div>
-      <ImageList className="ImageList" sx={{ width: "auto", height: "auto" }} cols={3}>
-        {ImageData.map((image, index) => (
-            <>
+      <ImageList className="ImageList" sx={{ width: "50vw", height: "auto" }} cols={1}>
+        {ImageData && ImageData.map((image, index) => {
+          
+          let monthactive; 
+        let previousdate;
+        let previousmonth;
+        const imagedate = new Date(image.date)
+        const imagemonth = imagedate.toLocaleString("default", {month: 'long'})
+        if(ImageData[index - 1]){
+          previousdate = new Date(ImageData[index - 1].date)
+          previousmonth = previousdate.toLocaleString("default", {month: 'long'})
+        }
+        if(previousdate && imagedate && previousmonth == imagemonth){
+          monthactive = false
+        } else {
+          
+          monthactive = true
+        }
+          return (
+            <div>
           <ImageListItem key={index} onClick={() => Navigate(`/image/${image.url}`, { state: image })}>
-
+            {monthactive && (
+              <h2>{new Date(image.date).toLocaleString("default", {
+                month: "long",
+              })}</h2>
+            )}
             {/* Affiche un indicateur "Privé" si l'image est privée */}
             {image.isPublic ? (
               <span className="private-indicator">Public</span>
             ) : <span className="private-indicator">Privée</span>}
+            <p>
+                        
+                        {new Date(image.date).toLocaleString("default", {
+                          day: "numeric",
+                          month: "long",
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}
+                      </p>
             <img
               className="imagehome"
               src={"http://localhost:3001/" + image.name}
@@ -90,8 +123,8 @@ export default function ImageCompte() {
             >
               Changer la confidentialité
             </Button>
-          </>
-        ))}
+          </div>
+        )})}
       </ImageList>
     </div>
   );
