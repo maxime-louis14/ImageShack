@@ -28,11 +28,7 @@ const DeleteAccount = ({ userId }) => {
       
       localStorage.removeItem("userId");
       localStorage.removeItem("token");
-      
-      if (response.logaout) {
-        setAuth(null);
-      }
-
+      setAuth(null);
       Navigate("/inscription");
       
     })
