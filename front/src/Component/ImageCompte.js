@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import Button from "@mui/material/Button";
-import "../pages/style/Gallery.css"; // Assurez-vous d'importer le fichier CSS approprié
+import "../pages/style/Gallery.css";
 import { useNavigate } from "react-router-dom";
 
 export default function ImageCompte() {
@@ -28,7 +28,12 @@ export default function ImageCompte() {
         data.sort((a,b) => {
           return new Date(b.date) - new Date(a.date);
         })
-        setImageData(data);
+        
+        const updatedData = data.map(image => ({
+          ...image,
+          private: !image.isPublic
+        }));
+        setImageData(updatedData);
       })
       .catch(error => {
         console.error("Erreur:", error);
@@ -36,17 +41,21 @@ export default function ImageCompte() {
   }, []);
 
   const toggleImagePrivacy = (id) => {
-    // Envoyez une requête pour changer l'état de l'image en privé ou public
-    // Utilisez la méthode appropriée (PUT ou PATCH) pour mettre à jour l'état de l'image
-    // Mettez à jour l'état de l'image dans le tableau ImageData en conséquence
-    // Par exemple, vous pouvez utiliser une requête comme celle-ci :
+    const imageToUpdate = ImageData.find(image => image.id === id);
+    const isPrivate = imageToUpdate.private;
+
+    const updatedImage = {
+      ...imageToUpdate,
+      private: !isPrivate
+    };
+
     fetch("http://localhost:3001/images/" + id, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ private: true }) // Modifiez la valeur de `private` selon vos besoins
+      body: JSON.stringify({ private: !isPrivate })
     })
       .then(response => {
         if (!response.ok) {
@@ -55,9 +64,8 @@ export default function ImageCompte() {
         return response.json();
       })
       .then(data => {
-        // Mettez à jour l'état de l'image dans le tableau ImageData
         const updatedImageData = ImageData.map(image =>
-          image.id === id ? { ...image, private: true } : image
+          image.id === id ? updatedImage : image
         );
         setImageData(updatedImageData);
       })
@@ -66,7 +74,22 @@ export default function ImageCompte() {
       });
   };
 
-  
+const deleteImage = (id) => {
+  fetch("http://localhost:3001/deleteImage/" + id, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(() => {
+      setImageData(prevData =>
+        prevData.filter(image => image.id !== id)
+      );
+    })
+    .catch((error) => {
+      console.error("Erreur:", error);
+    });
+}
 
   return (
     <div>
@@ -123,10 +146,15 @@ export default function ImageCompte() {
             >
               Changer la confidentialité
             </Button>
+            <button
+              onClick={() => deleteImage(image.id)}
+              className="delete-image-buttonCompte"
+            >
+              Supprimer une image
+            </button>
           </div>
         )})}
       </ImageList>
     </div>
   );
-  
 }

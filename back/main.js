@@ -31,7 +31,7 @@ const ImageUser = model("imageUser", imageDto);
 
 // Connect to the MongoDB database
 mongoose
-  .connect("mongodb://127.0.0.1:27017/account-projet4-express")
+  .connect("mongodb+srv://robin:robin@schoolmaterialcluster.xhun1xs.mongodb.net/")
   .then(() => console.log("Connected to MongoDB database"))
   .catch((error) =>
     console.log("Error connecting to MongoDB database: ", error)
