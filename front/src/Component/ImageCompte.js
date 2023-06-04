@@ -11,7 +11,7 @@ export default function ImageCompte() {
   const Navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3001/imagesUser", {
+    fetch("http://51.75.18.60:3001/imagesUser", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
