@@ -102,6 +102,7 @@ export default function ImageCompte() {
                 src={"http://localhost:3001/" + image.name}
                 alt={"http://localhost:3001/" + image.url}
               />
+               <span>/image/{image.url}</span> {/* Affiche l'URL de l'image */}
             </ImageListItem>
             <Button variant="contained" onClick={() => toggleImagePrivacy(image.id)}>
               Changer la confidentialité
