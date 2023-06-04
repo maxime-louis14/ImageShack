@@ -25,10 +25,10 @@ export default function ImageCompte() {
       })
       .then(data => {
         console.log("la liste des fichiers", data);
-        data.sort((a,b) => {
+        data.sort((a, b) => {
           return new Date(b.date) - new Date(a.date);
-        })
-        
+        });
+
         const updatedData = data.map(image => ({
           ...image,
           private: !image.isPublic
@@ -40,7 +40,7 @@ export default function ImageCompte() {
       });
   }, []);
 
-  const toggleImagePrivacy = (id) => {
+  const toggleImagePrivacy = id => {
     const imageToUpdate = ImageData.find(image => image.id === id);
     const isPrivate = imageToUpdate.private;
 
@@ -64,8 +64,8 @@ export default function ImageCompte() {
         return response.json();
       })
       .then(data => {
-        const updatedImageData = ImageData.map(image =>
-          image.id === id ? updatedImage : image
+        const updatedImageData = ImageData.map(
+          image => (image.id === id ? updatedImage : image)
         );
         setImageData(updatedImageData);
       })
@@ -74,22 +74,20 @@ export default function ImageCompte() {
       });
   };
 
-const deleteImage = (id) => {
-  fetch("http://127.0.0.1:3001/deleteImage/" + id, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(() => {
-      setImageData(prevData =>
-        prevData.filter(image => image.id !== id)
-      );
+  const deleteImage = id => {
+    fetch("http://51.75.18.60:3001/deleteImage/" + id, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
-    .catch((error) => {
-      console.error("Erreur:", error);
-    });
-}
+      .then(() => {
+        setImageData(prevData => prevData.filter(image => image.id !== id));
+      })
+      .catch(error => {
+        console.error("Erreur:", error);
+      });
+  };
 
   return (
     <div>
